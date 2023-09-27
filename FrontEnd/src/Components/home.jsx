@@ -4,15 +4,19 @@ import WorkoutDetails from './workoutDetails';
 import WorkoutForm from './workoutForm';
 import Grid from '@mui/material/Grid';
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const Home = () => {
-  const { workouts, dispatch } = useWorkoutsContext(); 
+  const { workouts, dispatch } = useWorkoutsContext();
+  const { user } = useAuthContext();
 
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/workouts');
-        const json = await response.data;
+        const response = await axios.get('http://localhost:8080/api/workouts', {
+          headers: { 'Authorization': `Bearer ${user.token}` },
+        });
+        const json = response.data;
 
         if (response.status === 200) {
           dispatch({ type: 'SET_WORKOUTS', payload: json });
@@ -21,9 +25,10 @@ const Home = () => {
         console.error(error);
       }
     };
-
-    fetchWorkouts();
-  }, [dispatch]);
+    if (user) {
+      fetchWorkouts();
+    }
+  }, [dispatch, user]);
 
   return (
     <div>

@@ -6,10 +6,12 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { useLogout } from '../hooks/logoutHook'
-import { Link } from 'react-router-dom'; // Importa Link
+import { Link } from 'react-router-dom'; 
+import {useAuthContext} from '../hooks/useAuthContext';
 
 export default function ButtonAppBar() {
   const { logout } = useLogout()
+  const { user } = useAuthContext()
 
   const handleClick = () => {
     logout()
@@ -25,20 +27,35 @@ export default function ButtonAppBar() {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
+          ></IconButton>
+          <Typography
+            color="inherit"
+            component={Link}
+            to="/"
+            variant="h6"
+            sx={{ flexGrow: 1 }}
           >
-            
-          </IconButton>
-          <Typography color="inherit" component={Link} to="/"variant="h6"  sx={{ flexGrow: 1 }}>
             Workout buddy
           </Typography>
+          <nav>
+            {user && (
           <div>
+            <span>{user.email}</span>
+            <Button color="inherit" onClick={handleClick}>Log out</Button>
+          </div>
+            )} 
+          {!user && (
 
-          <Button color="inherit" component={Link} to="/login">Log in</Button>
-          <Button color="inherit" component={Link} to="/signup">Sign up</Button>
+            <div>
+            <Button color="inherit" component={Link} to="/login">
+              Log in
+            </Button>
+            <Button color="inherit" component={Link} to="/signup">
+              Sign up
+            </Button>
           </div>
-          <div>
-          <Button color="inherit" onClick={handleClick}>Log out</Button>
-          </div>
+            )}
+          </nav>
         </Toolbar>
       </AppBar>
     </Box>

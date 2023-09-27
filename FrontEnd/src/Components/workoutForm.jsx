@@ -4,9 +4,11 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
+import {useAuthContext} from '../hooks/useAuthContext';
 
 const WorkoutForm = () => {
   const { dispatch } = useWorkoutsContext();
+  const {user} = useAuthContext()
   const [title, setTitle] = useState('');
   const [load, setLoad] = useState('');
   const [reps, setReps] = useState('');
@@ -14,12 +16,17 @@ const WorkoutForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user) {
+      setError('You musst be logged in')
+      return
+    }
     const workout = { title, load, reps };
 
     try {
       const response = await axios.post('http://localhost:8080/api/workouts', workout, {
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
         },
       });
 

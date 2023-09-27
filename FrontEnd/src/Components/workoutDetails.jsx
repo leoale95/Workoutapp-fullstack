@@ -6,22 +6,31 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Container from '@mui/material/Container';
-import axios from 'axios';
+import axios from 'axios'; 
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { useAuthContext } from '../hooks/useAuthContext'
 
 const WorkoutDetails = ({ workout }) => {
   const { dispatch } = useWorkoutsContext();
-  
+  const { user } = useAuthContext(); 
+
   const handleClick = async () => {
+    if (!user) {
+      return
+    }
     try {
-      await axios.delete('http://localhost:8080/api/workouts/' + workout._id);
+      await axios.delete(`http://localhost:8080/api/workouts/${workout._id}`, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
+
       
-      // Elimina el objeto 'workout' del estado utilizando su _id
       dispatch({ type: 'DELETE_WORKOUT', payload: workout._id });
     } catch (error) {
       console.error('Error deleting workout:', error);
-      // Maneja el error aquí si es necesario
+      
     }
   }
     
