@@ -1,12 +1,16 @@
 const Workout = require ('../models/workout.model')
 const mongoose = require('mongoose')
 
-// Get all work out
+// Get all work out with pagination
 const getWorkouts = async (req, res) =>{
     const user_id = req.user._id
-   const workouts = await Workout.find({ user_id}).sort({createdAt: -1})
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || 5
+    const skip = (page - 1) * limit
 
-   res.status(200).json(workouts)
+    const workouts = await Workout.find({ user_id}).sort({createdAt: -1}).skip(skip).limit(limit)
+
+    res.status(200).json(workouts)
 }
 
 // Get a work out
