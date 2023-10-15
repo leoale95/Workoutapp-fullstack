@@ -1,7 +1,7 @@
 const express = require ('express')
 const passport = require("passport");
 // Controller functions
-const {SignupUser, loginUser} = require ('../controllers/user.controller')
+const {signupUser, loginUser} = require ('../controllers/user.controller')
 
 const router = express.Router()
 
@@ -9,7 +9,7 @@ const router = express.Router()
 router.post('/login', loginUser)
 
 // Sign up router
-router.post('/signup', SignupUser)
+router.post('/signup', signupUser)
 
 
 // Github
