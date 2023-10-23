@@ -19,19 +19,18 @@ export const useSignup = () => {
 
       const json = response.data;
 
-      
       if (response.status === 200) {
-        
         localStorage.setItem('user', JSON.stringify(json));
-
-        
         dispatch({ type: 'LOGIN', payload: json });
+        return true; // Registro exitoso
       }
     } catch (error) {
       setError(error.message || 'An error occurred');
     } finally {
       setIsLoading(false);
     }
+
+    return false; // Registro fallido
   };
 
   return { signup, isLoading, error };

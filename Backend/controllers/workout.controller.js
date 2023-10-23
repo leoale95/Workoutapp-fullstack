@@ -1,4 +1,4 @@
-const Workout = require ('../models/workout.model')
+const Workout = require ('../daos/Mongo/models/workout.model')
 const mongoose = require('mongoose')
 
 // Get all work out with pagination

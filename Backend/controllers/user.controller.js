@@ -1,5 +1,5 @@
 require('dotenv').config();
-const User = require('../models/user.model');
+const User = require('../daos/Mongo/models/user.model');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
